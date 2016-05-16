@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DotNetUitilities.cpp" />
+    <ClCompile Include="function.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DotNetUtilities.h" />
+    <ClInclude Include="function.h" />
     <ClInclude Include="LoadShaders.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>

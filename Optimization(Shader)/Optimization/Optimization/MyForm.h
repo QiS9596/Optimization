@@ -2,7 +2,9 @@
 #include "ShaderManager.h"
 #include "DataManager.h"
 #include "DotNetUtilities.h"
-
+#include "function.h"
+#include <vector>
+#include <iostream>
 
 glm::mat4 ProjectionMatrix;
 glm::mat4 ViewMatrix;
@@ -67,6 +69,21 @@ namespace Optimization {
 			//
 			//TODO:  在此加入建構函式程式碼
 			//
+			testFunc1 func1;
+			for (int index = -10; index < 10; index++) {
+				std::vector<double> x;
+				x.push_back((double)index);
+				x.push_back((double)index);
+				//std::cout << x.size();
+				std::cout << "x " << x[0] << ", " << x[1];
+				std::cout << " y " << func1(x)<<std::endl;
+				std::vector<double> result;
+				func1.df(x,result);
+				std::cout << "mydf " << result[0] << ", " << result[1] << std::endl;
+				result.clear();
+				func1.standardDF(x, result);
+				std::cout << "standardDF " << result[0] << ", " << result[1] << std::endl;
+			}
 		}
 
 	protected:
