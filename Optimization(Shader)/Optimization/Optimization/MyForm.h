@@ -5,6 +5,7 @@
 #include "function.h"
 #include <vector>
 #include <iostream>
+#include "linemethod.h"
 
 glm::mat4 ProjectionMatrix;
 glm::mat4 ViewMatrix;
@@ -69,6 +70,8 @@ namespace Optimization {
 			//
 			//TODO:  在此加入建構函式程式碼
 			//
+		//=============================================
+			//test space
 			testFunc1 func1;
 			for (int index = -10; index < 10; index++) {
 				std::vector<double> x;
@@ -84,6 +87,17 @@ namespace Optimization {
 				func1.standardDF(x, result);
 				std::cout << "standardDF " << result[0] << ", " << result[1] << std::endl;
 			}
+			testFunc2 func2;
+			Brent br;
+			std::cout << "test0.0 " << func2(0) << std::endl;
+			MAX(1, 2);
+			SIGN(-1, 2);
+			Bracketmethod brac;
+			//brac.bracket(-1.0,1.0,func2);
+			//std::cout << "bracket method" << brac.bx << brac.fb << std::endl;
+			//br.minimize(func2);
+			std::cout << "test0" << br.minimize(func2)<< std::endl;
+			//test space end
 		}
 
 	protected:

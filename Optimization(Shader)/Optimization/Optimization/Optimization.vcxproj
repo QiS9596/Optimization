@@ -146,14 +146,17 @@
     <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DotNetUitilities.cpp" />
     <ClCompile Include="function.cpp" />
+    <ClCompile Include="linemethod.cpp" />
     <ClCompile Include="LoadShaders.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
+    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DotNetUtilities.h" />
     <ClInclude Include="function.h" />
+    <ClInclude Include="linemethod.h" />
     <ClInclude Include="LoadShaders.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>

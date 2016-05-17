@@ -20,3 +20,8 @@ public:
 		deriv.push_back(2.0*x[1]);
 	}
 };
+
+class testFunc2 : public function {
+public:
+	double operator()(double x) { return (x-1)*(x-1); };
+};
