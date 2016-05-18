@@ -98,30 +98,28 @@ struct Bracketmethod {
 
 struct Brent : Bracketmethod {
 	double xmin, fmin;
-	const double tol;
-	Brent(const double toll = 3.0e-8) : tol(toll) {
+	const double tolerence;
+	Brent(const double toll = 3.0e-8) : tolerence(toll) {
+		//set default boundary of the bracket
 		ax = -100;
 		cx = 100;
 	}
 	template <class T>
 	double minimize(T &func)
 	{
-		const int ITMAX = 100;
-		const double CGOLD = 0.3819660;
-		const double ZEPS = 1.0e-20;//TODO find it's reference
+		const int ITMAX = 100;//maximum iteration number
+		const double CGOLD = 0.3819660;//golden ratio, used in nr3
+		const double ZEPS = 1.0e-30;//small tolerence
 		double a, b, d = 0.0, etemp, fu, fv, fw, fx;
 		double p, q, r, tol1, tol2, u, v, w, x, xm;
 		double e = 0.0;
-		std::cout << "ax" << ax << std::endl;
-		std::cout << "cx" << cx << std::endl;
-		a = (ax < cx ? ax : cx);
-		b = (ax > cx ? ax : cx);
+		a = (ax < cx ? ax : cx);//switch the left and right boundary of the bracket
+		b = (ax > cx ? ax : cx);//to ensure that the left boundary is smaller than the right one
 		x = w = v = bx;
 		fw = fv = fx = func(x);
 		for (int iter = 0; iter<ITMAX; iter++) {
-			std::cout  << "iter" << iter << " x " << x << std::endl;
 			xm = 0.5*(a + b);
-			tol2 = 2.0*(tol1 = tol*abs(x) + ZEPS);
+			tol2 = 2.0*(tol1 = tolerence*abs(x) + ZEPS);
 			if (abs(x - xm) <= (tol2 - 0.5*(b - a))) {
 				fmin = fx;
 				return xmin = x;
@@ -169,8 +167,7 @@ struct Brent : Bracketmethod {
 				}
 			}
 		}
-		//throw("Too many iterations in brent");
-		std::cout << "too many interations" << std::endl;
+		std::cerr << "too many interations" << std::endl;
 	}
 };
 
@@ -191,10 +188,15 @@ struct F1dim {
 	}
 };
 
+//using brent method to minimize the multidimensional function in one dimension
 template <class T>
-ref class linemethod
+class linemethod
 {
 public:
-	linemethod();
+	std::vector<double> p;//the point
+	std::vector<double> xi;
+	T& func;
+	int n;
+	linemethod(T & funct) :func(funct) {};
+	double linmin();
 };
-

@@ -97,6 +97,8 @@ namespace Optimization {
 			//std::cout << "bracket method" << brac.bx << brac.fb << std::endl;
 			//br.minimize(func2);
 			std::cout << "test0" << br.minimize(func2)<< std::endl;
+			std::cout << "test01" << br.xmin<< std::endl;
+			std::cout << "test02" << br.fmin << std::endl;
 			//test space end
 		}
 

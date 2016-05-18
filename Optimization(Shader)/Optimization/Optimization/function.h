@@ -23,5 +23,5 @@ public:
 
 class testFunc2 : public function {
 public:
-	double operator()(double x) { return (x-1)*(x-1); };
+	double operator()(double x) { return (x+1)*(x+1); };
 };
