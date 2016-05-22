@@ -4,8 +4,9 @@
 #include "linemethod.h"
 #include "function.h"
 #include "cg.h"
-
+#include "simplified_matrix.h"
 #include <vector>
+#include "newton.h"
 #define VecD std::vector<double>
 
 namespace Optimization {
@@ -33,9 +34,9 @@ namespace Optimization {
 
 			//=============================================
 			//test space
-			
+
 			testFunc1 func;
-			
+
 			linemethod<function> lm(func);
 			lm.p.push_back(0); lm.p.push_back(3);
 			//std::cout << lm.linmin() << std::endl;
@@ -43,6 +44,12 @@ namespace Optimization {
 			VecD p; p.push_back(4.0); p.push_back(15.0);
 			p = cg01.minimize(p);
 			std::cout << "test 00 " << p[0] << ", " << p[1] << std::endl;
+			//Vector<double> vec(p);
+			newton n(func);
+			p.clear();
+			p.push_back(-3); p.push_back(1);
+			p = n.minimize(p);
+			std::cout << "test 01 " << p[0] << ", " << p[1] << std::endl;
 		}
 
 	protected:

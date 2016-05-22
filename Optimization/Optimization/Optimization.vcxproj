@@ -80,6 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>../../libabc/src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -142,9 +143,19 @@
     <ClCompile Include="function.cpp" />
     <ClCompile Include="linemethod.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="newton.cpp" />
+    <ClCompile Include="simplified_matrix.cpp" />
     <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\libabc\src\loadfile.hpp" />
+    <ClInclude Include="..\..\libabc\src\matrix.hpp" />
+    <ClInclude Include="..\..\libabc\src\polynomial.hpp" />
+    <ClInclude Include="..\..\libabc\src\queue.hpp" />
+    <ClInclude Include="..\..\libabc\src\rpn.hpp" />
+    <ClInclude Include="..\..\libabc\src\stack.hpp" />
+    <ClInclude Include="..\..\libabc\src\util.hpp" />
+    <ClInclude Include="..\..\libabc\src\vector.hpp" />
     <ClInclude Include="cg.h" />
     <ClInclude Include="DataManager.h" />
     <ClInclude Include="DotNetUtilities.h" />
@@ -153,6 +164,8 @@
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="newton.h" />
+    <ClInclude Include="simplified_matrix.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

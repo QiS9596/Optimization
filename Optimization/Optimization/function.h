@@ -13,7 +13,7 @@ public:
 class testFunc1 : public function {
 public:
 	double operator()(vecD x) {
-		return (x[0]-15) * (x[0]-15) + (x[1]+20) * (x[1]+20);
+		return x[0] * x[0] -2 * x[0] * x[1] + 4*x[1]*x[1];
 	}
 	void standardDF(vecD &x, vecD & deriv) {
 		deriv.push_back(2.0*x[0]);
