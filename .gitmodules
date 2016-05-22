@@ -1,0 +1,3 @@
+[submodule "libabc"]
+	path = libabc
+	url = https://github.com/Inndy/libabc.git
