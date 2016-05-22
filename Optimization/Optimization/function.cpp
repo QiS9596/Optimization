@@ -11,6 +11,7 @@ double function::operator ()(vecD vec) {
 }
 
 void function::df(vecD & x, vecD & deriv) {
+	deriv.clear();
 	for (int index = 0; index < x.size(); index++) {
 		vecD temp1(x);
 		vecD temp2(x);

@@ -3,6 +3,10 @@
 #include "DotNetUtilities.h"
 #include "linemethod.h"
 #include "function.h"
+#include "cg.h"
+
+#include <vector>
+#define VecD std::vector<double>
 
 namespace Optimization {
 
@@ -29,34 +33,16 @@ namespace Optimization {
 
 			//=============================================
 			//test space
-			testFunc1 func1;
-			for (int index = -10; index < 10; index++) {
-				std::vector<double> x;
-				x.push_back((double)index);
-				x.push_back((double)index);
-				//std::cout << x.size();
-				std::cout << "x " << x[0] << ", " << x[1];
-				std::cout << " y " << func1(x) << std::endl;
-				std::vector<double> result;
-				func1.df(x, result);
-				std::cout << "mydf " << result[0] << ", " << result[1] << std::endl;
-				result.clear();
-				func1.standardDF(x, result);
-				std::cout << "standardDF " << result[0] << ", " << result[1] << std::endl;
-			}
-			testFunc2 func2;
-			Brent br;
-			std::cout << "test0.0 " << func2(0) << std::endl;
-			MAX(1, 2);
-			SIGN(-1, 2);
-			Bracketmethod brac;
-			//brac.bracket(-1.0,1.0,func2);
-			//std::cout << "bracket method" << brac.bx << brac.fb << std::endl;
-			//br.minimize(func2);
-			std::cout << "test0" << br.minimize(func2) << std::endl;
-			std::cout << "test01" << br.xmin << std::endl;
-			std::cout << "test02" << br.fmin << std::endl;
-			//test space end
+			
+			testFunc1 func;
+			
+			linemethod<function> lm(func);
+			lm.p.push_back(0); lm.p.push_back(3);
+			//std::cout << lm.linmin() << std::endl;
+			cg<function> cg01(func);
+			VecD p; p.push_back(4.0); p.push_back(15.0);
+			p = cg01.minimize(p);
+			std::cout << "test 00 " << p[0] << ", " << p[1] << std::endl;
 		}
 
 	protected:

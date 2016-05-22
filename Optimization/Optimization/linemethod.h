@@ -182,7 +182,7 @@ struct F1dim {
 		xi(xii), n(pp.size()), func(funcc), xt(n) {}
 	double operator() (const double x)
 	{
-		for (Int j = 0; j<n; j++)
+		for (int j = 0; j<n; j++)
 			xt[j] = p[j] + x*xi[j];
 		return func(xt);
 	}
@@ -195,8 +195,26 @@ class linemethod
 public:
 	std::vector<double> p;//the point
 	std::vector<double> xi;
-	T& func;
+	T & func;
 	int n;
-	linemethod(T & funct) :func(funct) {};
-	double linmin();
+	linemethod(T & funct) :func(funct) {
+		
+	};
+	double linmin() {
+
+		double ax, cx, xmin;//the bracket
+		n = p.size();
+		F1dim<T> f1dim(p, xi, func);
+		ax = 0.0;
+		cx = 1.0;
+		Brent br;
+		br.bracket(ax, cx, f1dim);
+		xmin = br.minimize(f1dim);
+		for (int index = 0; index < n; index++) {
+			xi[index] *= xmin;
+			p[index] += xi[index];
+		}
+		std::cout << xi[0] << "," << xi[1] << std::endl;
+		return br.fmin;
+	};
 };
