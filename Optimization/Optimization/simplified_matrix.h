@@ -51,7 +51,6 @@ public:
 	}
 
 	static void gauss_jordan_elimination(simplified_matrix &A, VecD &b) {
-		std::cout << "gauss jordan" << std::endl;
 		int i, j, k;
 		int icol, irow;
 		int l, ll, n = A.h, m = 1;

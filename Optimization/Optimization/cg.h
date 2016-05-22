@@ -26,23 +26,17 @@ public:
 		VecD g(dimension), h(dimension);
 		xi.resize(dimension);
 		double fp = func(p);
-		std::cout << "fp" << fp << std::endl;
 		func.df(p, xi);//p is the current point.this function set f(vec)dvec[i] to xi[i]
 		for (int index = 0; index < dimension; index++) {
 			g[index] = -xi[index];
 			xi[index] = h[index] = g[index];
 		}
 		for (int iterations = 0; iterations < MAXIMUM_ITERATION_COUNT; iterations++) {
+			std::cout << "i " << iterations << std::endl; //OUT_PUT
 			iter = iterations;
 			cgret = linmin();
-			//std::cout << "cgret" << cgret << std::endl;
 
 			if (2.0 * abs(cgret - fp) <= cgtol*(abs(cgret) + abs(fp) + EPS)) {
-				std::cout << "fp" << fp << std::endl;
-				std::cout << cgret << std::endl;
-				std::cout << "first flag" << 2.0 * abs(cgret - fp) << std::endl;
-				std::cout << "other tolerence" << cgtol*(abs(cgret) + abs(fp) + EPS) << std::endl;
-				std::cout << "return 1" << std::endl;
 				return p;
 			}
 			fp = cgret;
@@ -54,7 +48,6 @@ public:
 				if (temp > test)test = temp;
 			}
 			if (test < GTOL) { 
-				std::cout << "return 2" << std::endl;
 				return p;
 			}
 			dgg = gg = 0.0;
@@ -63,14 +56,19 @@ public:
 				dgg += (xi[index] + g[index])*xi[index];
 			}
 			if (gg == 0.0) {
-				std::cout << "return 3" << std::endl;
 				return p;
 			}
-			double gram = dgg / gg;
+			//std::cout << "delta x" << xi[0] << std::endl;
+			double gram = dgg / gg;//beita
 			for (int j = 0; j<n; j++) {
 				g[j] = -xi[j];
+				std::cout << "Si" << g[j] << std::endl;//OUT_PUT
 				xi[j] = h[j] = g[j] + gram*h[j];//Si
 			}
+			for (int index = 0; index < n; index++) {
+				std::cout << "Xi" << p[index] << std::endl;//OUT_PUT
+			}
+			
 		}
 		std::cerr << "too many iteration" << std::endl;
 	};//initial point pp, return value minimized point

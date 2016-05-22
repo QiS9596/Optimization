@@ -25,13 +25,16 @@ public:
 		for (int index = 0; index < MAXIMUM_ITERATION_COUNT; index++) {
 
 			Mat * H = generate_current_Hessian_matrix();
-			std::cout << "iteration count" << index << std::endl;
-			std::cout << H->str() << std::endl;
-			std::cout << "break point 4" << std::endl;
+			std::cout << "iteration count" << index << std::endl;//OUT_PUT
+			std::cout << "Hessian" << H->str() << std::endl;//OUT_PUT
 
 			H->inverse();
-			std::cout << H->str() << std::endl;
-			std::cout << "break point 5" << std::endl;
+			std::cout << "Hessian inverse" << H->str() << std::endl;//OUT_PUT
+			std::cout << "x ";//OUT_PUT
+			for (int subidx = 0; subidx < dimension; subidx++) {
+				std::cout << p[subidx] << " ";
+			}
+			std::cout << std::endl;
 			VecD dp(dimension);
 			func.df(p, dp);
 			pt = (*vec_minus(p, *(H->mul(dp))));
@@ -47,7 +50,7 @@ public:
 		/*Fxy=F(x+d,y+d)-F(x+2d,y)-F(x,y+2d)+F(x,y..)/d^2*/
 		VecD dp(dimension);
 		func.df(p,dp);
-		std::cout <<"p" << p[0] << "," << p[1];
+
 		Mat *H = new Mat(dimension,dimension);
 		for (int indexa = 0; indexa < dimension; indexa++) {
 			for (int indexb = 0; indexb < dimension; indexb++) {
@@ -56,11 +59,11 @@ public:
 					tempa[index] = tempb[index] = tempc[index] = p[index];
 				tempa[indexa] += 0.001; tempa[indexb] += 0.001;
 				tempb[indexa] += 0.001; tempc[indexb] += 0.001;
-				std::cout << "tempa" << tempa[0] << ", " << tempa[1] << std::endl;
-				std::cout << "function value of tempa" << func(tempa) << std::endl;
-				std::cout << "function value of tempb" << func(tempb) << std::endl;
-				std::cout << "function value of tempc" << func(tempc) << std::endl;
-				std::cout << "my test of h" << (func(tempa) - func(tempb) - func(tempc) + func(p))  << std::endl;
+				//std::cout << "tempa" << tempa[0] << ", " << tempa[1] << std::endl;
+				//std::cout << "function value of tempa" << func(tempa) << std::endl;
+				//std::cout << "function value of tempb" << func(tempb) << std::endl;
+				//std::cout << "function value of tempc" << func(tempc) << std::endl;
+				//std::cout << "my test of h" << (func(tempa) - func(tempb) - func(tempc) + func(p))  << std::endl;
 				H->cell(indexa, indexb) = (func(tempa) - func(tempb) - func(tempc) +func(p))/(0.001*0.001);
 			}
 		}

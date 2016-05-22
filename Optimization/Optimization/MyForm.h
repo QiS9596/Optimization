@@ -35,21 +35,20 @@ namespace Optimization {
 			//=============================================
 			//test space
 
-			testFunc1 func;
-
-			linemethod<function> lm(func);
-			lm.p.push_back(0); lm.p.push_back(3);
-			//std::cout << lm.linmin() << std::endl;
+			testFunc2 func;
 			cg<function> cg01(func);
-			VecD p; p.push_back(4.0); p.push_back(15.0);
+			VecD p; p.push_back(0.3); 
 			p = cg01.minimize(p);
-			std::cout << "test 00 " << p[0] << ", " << p[1] << std::endl;
-			//Vector<double> vec(p);
-			newton n(func);
+			std::cout << "xmin " << p[0] << std::endl;
+			std::cout << "fmin" << func(p) << std::endl;
+
+			testFunc3 func1;
+			newton nw(func1);
 			p.clear();
-			p.push_back(-3); p.push_back(1);
-			p = n.minimize(p);
-			std::cout << "test 01 " << p[0] << ", " << p[1] << std::endl;
+			p.push_back(5.0);
+			p.push_back(5.0);
+			p = nw.minimize(p);
+			std::cout << p[0] << " " << p[1] << std::endl;
 		}
 
 	protected:

@@ -214,7 +214,7 @@ public:
 			xi[index] *= xmin;
 			p[index] += xi[index];
 		}
-		std::cout << xi[0] << "," << xi[1] << std::endl;
+
 		return br.fmin;
 	};
 };

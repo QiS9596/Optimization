@@ -23,5 +23,9 @@ public:
 
 class testFunc2 : public function {
 public:
-	double operator()(double x) { return (x + 1)*(x + 1)+1; };
+	double operator()(vecD x) { return x[0]*x[0] + x[0] -2* pow(x[0],0.5); };
+};
+
+class testFunc3 : public function {
+	double operator()(vecD x) { return 3 + pow((x[0] - 1.5*x[1]), 2) + pow(x[1] - 2, 2); };
 };
