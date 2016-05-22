@@ -30,6 +30,12 @@
     <ClCompile Include="linemethod.cpp">
       <Filter>原始程式檔</Filter>
     </ClCompile>
+    <ClCompile Include="cg.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
+    <ClCompile Include="source.cpp">
+      <Filter>原始程式檔</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyForm.h">
@@ -45,6 +51,9 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="linemethod.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="cg.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>
