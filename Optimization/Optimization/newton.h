@@ -133,6 +133,7 @@ public:
 				temp = abs(xi[i]) / (abs(p[i])+ 1.0);
 				if (temp > test) test = temp;
 			}
+			/*
 			if (test < TOLX)
 				return;
 			for (int i = 0; i<n; i++) dg[i] = g[i];
@@ -142,7 +143,7 @@ public:
 			for (int i = 0; i<n; i++) {
 				temp = abs(g[i])*(abs(p[i])+ 1.0) / den;
 				if (temp > test) test = temp;
-			}
+			}*/
 			if (test < gtol)
 				return;
 			for (int i = 0; i<n; i++)
@@ -158,6 +159,7 @@ public:
 				sumdg += dg[i]*dg[i];
 				sumxi += xi[i]*xi[i];
 			}
+			/*
 			if (fac > sqrt(EPS*sumdg*sumxi)) {
 				fac = 1.0 / fac;
 				fad = 1.0 / fae;
@@ -173,7 +175,7 @@ public:
 			for (int i = 0; i<n; i++) {
 				xi[i] = 0.0;
 				for (int j = 0; j<n; j++) xi[i] -= hessin.cell(i,j) * g[j];
-			}
+			}*/
 		}
 		throw("too many iterations in dfpmin");
 	}
