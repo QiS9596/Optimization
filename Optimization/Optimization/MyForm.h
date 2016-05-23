@@ -281,6 +281,15 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 			{
 				Output->Text += userCommand[0];
 				Output->Text += Environment::NewLine;
+
+				std::cout << "Conjugate Gradient method test: " << std::endl;
+				testFunc2 func;
+				cg<function> cg01(func);
+				VecD p; p.push_back(0.3);
+				p = cg01.minimize(p);
+				std::cout << "xmin " << p[0] << std::endl;
+				std::cout << "fmin" << func(p) << std::endl;
+				Output->Text += gcnew String(cg01.out_put_data().c_str());
 				//std::vector<std::string> temp = tokenmanger->token_interface(userCommand[0]);
 				//for (int i = 0; i < temp.size(); i++)
 				//	Output->Text += gcnew String(temp[i].c_str()) + Environment::NewLine;

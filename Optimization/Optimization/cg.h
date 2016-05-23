@@ -2,11 +2,13 @@
 #include "linemethod.h"
 #include <vector>
 #include <iostream>
+#include <sstream>
 #define VecD std::vector<double>
 template <class T>
 class cg : public linemethod<T>
 {
 public:
+	std::stringstream buffer;
 	int iter;
 	double cgret;
 	using linemethod<T>::func;
@@ -18,7 +20,7 @@ public:
 	VecD minimize(VecD & pp) {
 		const int MAXIMUM_ITERATION_COUNT = 300;	//maximum iteration count
 		const double EPS = 1.0e-18;//tolerance
-		const double GTOL = 1.0e-8;//GTOL is the convergence criterion for the zero gradient test says the nr3 book
+		const double GTOL = 1.0e-18;//GTOL is the convergence criterion for the zero gradient test says the nr3 book
 		double gg, dgg;
 		int dimension = pp.size();
 		//p.resize(dimension);
@@ -33,6 +35,7 @@ public:
 		}
 		for (int iterations = 0; iterations < MAXIMUM_ITERATION_COUNT; iterations++) {
 			std::cout << "i " << iterations << std::endl; //OUT_PUT
+			buffer << "i " << iterations << "\r\n";
 			iter = iterations;
 			cgret = linmin();
 
@@ -63,14 +66,20 @@ public:
 			for (int j = 0; j<n; j++) {
 				g[j] = -xi[j];
 				std::cout << "Si" << g[j] << std::endl;//OUT_PUT
+				buffer << "Si" << g[j] << "\r\n";
 				xi[j] = h[j] = g[j] + gram*h[j];//Si
 			}
 			for (int index = 0; index < n; index++) {
 				std::cout << "Xi" << p[index] << std::endl;//OUT_PUT
+				buffer << "Xi" << p[index] << "\r\n";
 			}
 			
 		}
 		std::cerr << "too many iteration" << std::endl;
 	};//initial point pp, return value minimized point
+
+	std::string out_put_data() {
+		return buffer.str();
+	}
 };
 

@@ -2,12 +2,14 @@
 #include "function.h"
 #include "simplified_matrix.h"
 #include <vector>
+#include <sstream>
 #define VecD std::vector<double>
 #define Mat simplified_matrix
 
 class newton
 {
 public:
+	stringstream buffer;
 	function & func;
 	newton(function & funct) : func(funct) {};
 	VecD p;
@@ -26,15 +28,21 @@ public:
 
 			Mat * H = generate_current_Hessian_matrix();
 			std::cout << "iteration count" << index << std::endl;//OUT_PUT
+			buffer << "iteration count" << index << "\r\n";
 			std::cout << "Hessian" << H->str() << std::endl;//OUT_PUT
+			buffer << "Hessian" << H->str() << "\r\n";//OUT_PUT
 
 			H->inverse();
 			std::cout << "Hessian inverse" << H->str() << std::endl;//OUT_PUT
+			buffer << "Hessian inverse" << H->str() << "\r\n";//OUT_PUT
 			std::cout << "x ";//OUT_PUT
+			buffer << "x ";//OUT_PUT
 			for (int subidx = 0; subidx < dimension; subidx++) {
 				std::cout << p[subidx] << " ";
+				buffer << p[subidx] << " ";
 			}
 			std::cout << std::endl;
+			buffer << "\r\n";
 			VecD dp(dimension);
 			func.df(p, dp);
 			pt = (*vec_minus(p, *(H->mul(dp))));
@@ -45,6 +53,11 @@ public:
 		}
 		return p;
 	}
+
+	string out_put_data() {
+		return buffer.str();
+	}
+
 	Mat * generate_current_Hessian_matrix() {
 
 		/*Fxy=F(x+d,y+d)-F(x+2d,y)-F(x,y+2d)+F(x,y..)/d^2*/
@@ -99,6 +112,7 @@ public:
 	using newton::NEW_TOL;
 	using newton::MAXIMUM_ITERATION_COUNT ;
 	using newton::dimension;
+	using newton::buffer;
 
 	void dfpmin(VecD &p, double gtol, int &iter, double &fret, function &funcd)
 	{
@@ -193,17 +207,21 @@ public:
 			Mat * H = generate_current_Hessian_matrix();
 			if (index == 0) {
 				std::cout << "Initial Hessian: ";//OUT_PUT
+				buffer << "Initial Hessian: ";
 			}
 			else {
 
 				std::cout << "Hessian: ";//OUT_PUT
+				buffer << "Hessian: ";
 			}
 			std::cout << H->str() << std::endl;//OUT_PUT
+			buffer << H->str() << "\r\n";
 
 			H->inverse();
-			if(index == 0)
+			if (index == 0) {
 				std::cout << "Initial Hessian inverse" << H->str() << std::endl;//OUT_PUT
-
+				buffer << "Initial Hessian inverse" << H->str() << "\r\n";
+			}
 
 			VecD dp(dimension);
 			func.df(p, dp);
@@ -214,10 +232,13 @@ public:
 			p = pt;
 
 			std::cout << "x ";//OUT_PUT
+			buffer << "x ";
 			for (int subidx = 0; subidx < dimension; subidx++) {
 				std::cout << p[subidx] << " ";
+				buffer << p[subidx] << " ";
 			}
 			std::cout << std::endl;
+			buffer << "\r\n";
 		}
 		return p;
 	}
