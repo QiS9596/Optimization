@@ -34,7 +34,13 @@ namespace Optimization {
 
 			//=============================================
 			//test space
+			std::cout << "Quasi-Newton Method test" << std::endl;
+			testFunc1 func0;
+			Qnewton qnw(func0);
+			VecD myp; myp.push_back(0.3);
+			myp = qnw.minimize(myp);
 
+			std::cout << "Conjugate Gradient method test: " << std::endl;
 			testFunc2 func;
 			cg<function> cg01(func);
 			VecD p; p.push_back(0.3); 
@@ -42,6 +48,7 @@ namespace Optimization {
 			std::cout << "xmin " << p[0] << std::endl;
 			std::cout << "fmin" << func(p) << std::endl;
 
+			std::cout << "Newton Method for Optimization test: " << std::endl;
 			testFunc3 func1;
 			newton nw(func1);
 			p.clear();
