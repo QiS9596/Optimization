@@ -277,22 +277,77 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				Input->Text = "";
 				Output->Text = "";
 			}
+			else if (userCommand[0] == "cmd\r" || userCommand[0] == "cmd") {
+				Output->Text += "opt int(function select) double double (initial point) int (method)\r\n";
+				Output->Text += "for 1D function, input any double value for the second double input for init point";
+				Output->Text += Environment::NewLine;
+			}
 			else
 			{
-				Output->Text += userCommand[0];
-				Output->Text += Environment::NewLine;
 
-				std::cout << "Conjugate Gradient method test: " << std::endl;
-				testFunc2 func;
-				cg<function> cg01(func);
-				VecD p; p.push_back(0.3);
-				p = cg01.minimize(p);
-				std::cout << "xmin " << p[0] << std::endl;
-				std::cout << "fmin" << func(p) << std::endl;
-				Output->Text += gcnew String(cg01.out_put_data().c_str());
-				//std::vector<std::string> temp = tokenmanger->token_interface(userCommand[0]);
-				//for (int i = 0; i < temp.size(); i++)
-				//	Output->Text += gcnew String(temp[i].c_str()) + Environment::NewLine;
+				int a = Convert::ToInt32(userCommand[4]);
+				switch (a) {
+				case 1: {
+					int temp = Convert::ToInt32(userCommand[1]);
+					std::cout << "break point" << std::endl;
+					newton nw(*((*functions)[temp-1]));
+					std::cout << "break point1" << std::endl;
+					VecD p;
+					p.push_back(Convert::ToDouble(userCommand[2]));
+					if (temp != 1)
+						p.push_back(Convert::ToDouble(userCommand[3]));
+					p = nw.minimize(p);
+					Output->Text += gcnew String(nw.out_put_data().c_str());
+					Output->Text += "x: ";
+					Output->Text += p[0];
+					if (temp != 1) {
+						Output->Text += ", ";
+						Output->Text += p[1];
+					}
+					Output->Text += Environment::NewLine;
+					break;
+				}
+				case 2: {
+					int temp = Convert::ToInt32(userCommand[1]);
+					std::cout << "break point" << std::endl;
+					Qnewton qnw(*((*functions)[temp - 1]));
+					std::cout << "break point1" << std::endl;
+					VecD p;
+					p.push_back(Convert::ToDouble(userCommand[2]));
+					if (temp != 1)
+						p.push_back(Convert::ToDouble(userCommand[3]));
+					p = qnw.minimize(p);
+					Output->Text += gcnew String(qnw.out_put_data().c_str());
+					Output->Text += "x: ";
+					Output->Text += p[0];
+					if (temp != 1) {
+						Output->Text += ", ";
+						Output->Text += p[1];
+					}
+					Output->Text += Environment::NewLine;
+					break;
+				}
+				case 3: {
+					int temp = Convert::ToInt32(userCommand[1]);
+					std::cout << "break point" << std::endl;
+					cg<function> cg1(*((*functions)[temp - 1]));
+					std::cout << "break point1" << std::endl;
+					VecD p;
+					p.push_back(Convert::ToDouble(userCommand[2]));
+					if (temp != 1)
+						p.push_back(Convert::ToDouble(userCommand[3]));
+					p = cg1.minimize(p);
+					Output->Text += gcnew String(cg1.out_put_data().c_str());
+					Output->Text += "x: ";
+					Output->Text += p[0];
+					if (temp != 1) {
+						Output->Text += ", ";
+						Output->Text += p[1];
+					}
+					Output->Text += Environment::NewLine;
+					break;
+				}
+				}
 			}
 		}
 	

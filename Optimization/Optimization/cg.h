@@ -63,16 +63,20 @@ public:
 			}
 			//std::cout << "delta x" << xi[0] << std::endl;
 			double gram = dgg / gg;//beita
+			buffer << "Si ";
 			for (int j = 0; j<n; j++) {
 				g[j] = -xi[j];
 				std::cout << "Si" << g[j] << std::endl;//OUT_PUT
-				buffer << "Si" << g[j] << "\r\n";
+				buffer <<g[j] << " ";
 				xi[j] = h[j] = g[j] + gram*h[j];//Si
 			}
+			buffer << "\r\n";
+			buffer << "Xi";
 			for (int index = 0; index < n; index++) {
 				std::cout << "Xi" << p[index] << std::endl;//OUT_PUT
-				buffer << "Xi" << p[index] << "\r\n";
+				buffer << p[index] << " ";
 			}
+			buffer << "\r\n";
 			
 		}
 		std::cerr << "too many iteration" << std::endl;
