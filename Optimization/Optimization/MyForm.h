@@ -41,6 +41,7 @@ namespace Optimization {
 			(*functions).push_back(func03);
 			//=============================================
 			//test space
+
 			std::cout << "Quasi-Newton Method test" << std::endl;
 			testFunc1 func0;
 			Qnewton qnw((*((*functions)[0])));
@@ -260,6 +261,7 @@ private: System::Void openFileDialog1_FileOk(System::Object^  sender, System::Co
 			Output->Text += gcnew String(equations[i].c_str());
 			Output->Text += Environment::NewLine;
 		}
+		function func(equations[0]);
 	}
 }
 private: System::Void Input_TextChanged(System::Object^  sender, System::EventArgs^  e) {
