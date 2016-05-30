@@ -96,6 +96,7 @@ function::function(std::string equation) {
 		if (abs(y_expo[index] - 0.0)>3.0e-08)
 			this->dimension = 2;
 	}
+	std::cout << "dimension" << this->dimension << std::endl;
 }
 
 double function::operator ()(vecD vec) {

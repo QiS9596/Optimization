@@ -269,7 +269,7 @@ private: System::Void openFileDialog1_FileOk(System::Object^  sender, System::Co
 			functions->push_back(new function(equations[index]));
 			std::cout << (*functions)[index]->str() << index << std::endl;
 		}
-		new function(equations[0]);
+		std::cout << (*functions)[0]->dimension;
 	}
 }
 private: System::Void Input_TextChanged(System::Object^  sender, System::EventArgs^  e) {
@@ -304,7 +304,9 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					std::cout << "break point1" << std::endl;
 					VecD p;
 					p.push_back(Convert::ToDouble(userCommand[2]));
-					if (temp != 1)
+					std::cout << "current dimension " << (*functions)[temp]->dimension << std::endl;
+					std::cout << (*functions)[temp]->str() << std::endl;
+					if ((*functions)[temp-1]->dimension == 2)
 						p.push_back(Convert::ToDouble(userCommand[3]));
 					p = nw.minimize(p);
 					Output->Text += gcnew String(nw.out_put_data().c_str());
