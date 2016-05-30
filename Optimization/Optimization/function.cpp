@@ -90,10 +90,24 @@ function::function(std::string equation) {
 				constant_factor.push_back(carry);
 		}
 	}
+
+	this->dimension = 1;
+	for (int index = 0; index < y_expo.size(); index++) {
+		if (abs(y_expo[index] - 0.0)>3.0e-08)
+			this->dimension = 2;
+	}
 }
 
 double function::operator ()(vecD vec) {
-	return 0.0;
+	double result = 0.0;
+	double x = vec[0];
+	double y = 1;
+	if (this->dimension == 2)
+		y = vec[1];
+	for (int index = 0; index < x_expo.size(); index++) {
+		result += constant_factor[index] * pow(x, x_expo[index])*pow(y, y_expo[index]);
+	}
+	return result;
 }
 
 void function::df(vecD & x, vecD & deriv) {

@@ -29,10 +29,13 @@ namespace Optimization {
 		{
 			InitializeComponent();
 			dataManager = new DataManager();
+
+			functions = new std::vector<function*>;
 			//
 			//TODO:  在此加入建構函式程式碼
 			//
-			functions = new std::vector<function*>;
+			/*
+
 			testFunc1 *func01 = new testFunc1();
 			testFunc2 *func02 = new testFunc2();
 			testFunc3 *func03 = new testFunc3();
@@ -63,7 +66,7 @@ namespace Optimization {
 			p.push_back(5.0);
 			p.push_back(5.0);
 			p = nw.minimize(p);
-			std::cout << p[0] << " " << p[1] << std::endl;
+			std::cout << p[0] << " " << p[1] << std::endl;*/
 		}
 
 	protected:
@@ -260,8 +263,13 @@ private: System::Void openFileDialog1_FileOk(System::Object^  sender, System::Co
 		{
 			Output->Text += gcnew String(equations[i].c_str());
 			Output->Text += Environment::NewLine;
+
 		}
-		function func(equations[0]);
+		for (unsigned int index = 0; index < equations.size(); index++){
+			functions->push_back(new function(equations[index]));
+			std::cout << (*functions)[index]->str() << index << std::endl;
+		}
+		new function(equations[0]);
 	}
 }
 private: System::Void Input_TextChanged(System::Object^  sender, System::EventArgs^  e) {

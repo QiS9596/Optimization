@@ -3,20 +3,43 @@
 #define vecD std::vector<double>
 #include <string>
 #include <iostream>
+#include <sstream>
 const char NUM[] = "0123456789.";
 class function
 {
 public:
 	function();
 	function(std::string);
+private:
+	std::stringstream buffer;
 	vecD constant_factor;
 	vecD x_expo;
 	vecD y_expo;
+public:
 	int dimension;
 	virtual double operator()(vecD);
 	void df(vecD & x, vecD & deriv);
 
-
+	std::string str() {
+		buffer.clear();
+		if (this->dimension == 1) {
+			for (int index = 0; index < x_expo.size(); index++) {
+				buffer << " ( " << constant_factor[index] << " * x^(" << x_expo[index] << ") ";
+				if (index != x_expo.size() - 1)
+					buffer << "+";
+			}
+			buffer << "/r/n";
+		}
+		else if (this->dimension == 2) {
+			for (int index = 0; index < x_expo.size(); index++) {
+				buffer << " ( " << constant_factor[index] << " * x^(" << x_expo[index] << ") * y^(" << y_expo[index] << ") ";
+				if (index != x_expo.size() - 1)
+					buffer << "+";
+			}
+			buffer << "/r/n";
+		}
+		return buffer.str();
+	}
 
 	bool isNumirical(std::string str) {
 		for (int index = 0; index < str.size(); index++) {
