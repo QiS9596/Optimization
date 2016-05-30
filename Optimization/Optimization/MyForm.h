@@ -31,42 +31,6 @@ namespace Optimization {
 			dataManager = new DataManager();
 
 			functions = new std::vector<function*>;
-			//
-			//TODO:  在此加入建構函式程式碼
-			//
-			/*
-
-			testFunc1 *func01 = new testFunc1();
-			testFunc2 *func02 = new testFunc2();
-			testFunc3 *func03 = new testFunc3();
-			(*functions).push_back(func01);
-			(*functions).push_back(func02);
-			(*functions).push_back(func03);
-			//=============================================
-			//test space
-
-			std::cout << "Quasi-Newton Method test" << std::endl;
-			testFunc1 func0;
-			Qnewton qnw((*((*functions)[0])));
-			VecD myp; myp.push_back(0.3);
-			myp = qnw.minimize(myp);
-
-			std::cout << "Conjugate Gradient method test: " << std::endl;
-			testFunc2 func;
-			cg<function> cg01(func);
-			VecD p; p.push_back(0.3); 
-			p = cg01.minimize(p);
-			std::cout << "xmin " << p[0] << std::endl;
-			std::cout << "fmin" << func(p) << std::endl;
-
-			std::cout << "Newton Method for Optimization test: " << std::endl;
-			testFunc3 func1;
-			newton nw(func1);
-			p.clear();
-			p.push_back(5.0);
-			p.push_back(5.0);
-			p = nw.minimize(p);
-			std::cout << p[0] << " " << p[1] << std::endl;*/
 		}
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	public:
