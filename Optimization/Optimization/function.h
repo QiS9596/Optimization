@@ -24,19 +24,19 @@ public:
 		buffer.clear();
 		if (this->dimension == 1) {
 			for (int index = 0; index < x_expo.size(); index++) {
-				buffer << " ( " << constant_factor[index] << " * x^(" << x_expo[index] << ") ";
+				buffer << " ( " << constant_factor[index] << " * x^(" << x_expo[index] << ") ) ";
 				if (index != x_expo.size() - 1)
 					buffer << "+";
 			}
-			buffer << "/r/n";
+			buffer << "\r\n";
 		}
 		else if (this->dimension == 2) {
 			for (int index = 0; index < x_expo.size(); index++) {
-				buffer << " ( " << constant_factor[index] << " * x^(" << x_expo[index] << ") * y^(" << y_expo[index] << ") ";
+				buffer << " ( " << constant_factor[index] << " * x^(" << x_expo[index] << ") * y^(" << y_expo[index] << ") ) ";
 				if (index != x_expo.size() - 1)
 					buffer << "+";
 			}
-			buffer << "/r/n";
+			buffer << "\r\n";
 		}
 		return buffer.str();
 	}

@@ -291,8 +291,19 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				Output->Text += "opt int(function select) double double (initial point) int (method)\r\n";
 				Output->Text += "for 1D function, input any double value for the second double input for init point";
 				Output->Text += Environment::NewLine;
+				Output->Text += "func \r\n";
+				Output->Text += "print out all the functions";
+				Output->Text += Environment::NewLine;
 			}
-			else
+			else if (userCommand[0] == "func" || userCommand[0] == "func\r") {
+				for (int index = 0; index < (*functions).size(); index++) {
+					Output->Text += index+1;
+					Output->Text += "th func:";
+					Output->Text += gcnew String((*functions)[index]->str().c_str());
+					//Output->Text += Environment::NewLine;
+				}
+			}
+			else if(userCommand[0][0] == 'o' && userCommand[0][1] == 'p' && userCommand[0][2] == 't')
 			{
 
 				int a = Convert::ToInt32(userCommand[4]);
