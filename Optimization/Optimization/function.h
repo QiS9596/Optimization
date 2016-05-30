@@ -11,6 +11,8 @@ public:
 	function();
 	function(std::string);
 private:
+	bool intervalSet;
+	double lowerBound, upperBound;
 	std::stringstream buffer;
 	vecD constant_factor;
 	vecD x_expo;
@@ -19,7 +21,7 @@ public:
 	int dimension;
 	virtual double operator()(vecD);
 	void df(vecD & x, vecD & deriv);
-
+	void setInterval(double l,double u);
 	std::string str() {
 		buffer.clear();
 		if (this->dimension == 1) {

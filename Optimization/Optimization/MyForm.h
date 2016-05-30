@@ -289,12 +289,23 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 			}
 			else if (userCommand[0] == "cmd\r" || userCommand[0] == "cmd") {
 				Output->Text += "opt int(function select) double double (initial point) int (method)\r\n";
-				Output->Text += "for 1D function, input any double value for the second double input for init point";
+				Output->Text += "	for 1D function, input any double value for the second double input for init point";
+				Output->Text += Environment::NewLine;
+				Output->Text += "	method = 1 for new ton 2 for q newton 3 for conjugete gradient";
 				Output->Text += Environment::NewLine;
 				Output->Text += "func \r\n";
-				Output->Text += "print out all the functions";
+				Output->Text += "	print out all the functions";
+				Output->Text += Environment::NewLine;
+				Output->Text += "itv int(function number) double(lower bound) double(upper bound)";
+				Output->Text += Environment::NewLine;
+				Output->Text += "	set the x's inverval. Unfortunately it may cause error for newton and q newton method currently";
 				Output->Text += Environment::NewLine;
 			}
+			else if (userCommand[0][0] == 'i'&&userCommand[0][1] == 't'&&userCommand[0][2] == 'v') {
+				int a = Convert::ToInt32(userCommand[1]);
+				(*functions)[a - 1]->setInterval(Convert::ToDouble(userCommand[2]), Convert::ToDouble(userCommand[3]));
+			}
+
 			else if (userCommand[0] == "func" || userCommand[0] == "func\r") {
 				for (int index = 0; index < (*functions).size(); index++) {
 					Output->Text += index+1;
@@ -315,8 +326,8 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					std::cout << "break point1" << std::endl;
 					VecD p;
 					p.push_back(Convert::ToDouble(userCommand[2]));
-					std::cout << "current dimension " << (*functions)[temp]->dimension << std::endl;
-					std::cout << (*functions)[temp]->str() << std::endl;
+					//std::cout << "current dimension " << (*functions)[temp]->dimension << std::endl;
+					//std::cout << (*functions)[temp]->str() << std::endl;
 					if ((*functions)[temp-1]->dimension == 2)
 						p.push_back(Convert::ToDouble(userCommand[3]));
 					p = nw.minimize(p);

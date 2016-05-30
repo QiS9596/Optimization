@@ -7,6 +7,7 @@ function::function()
 }
 
 function::function(std::string equation) {
+	intervalSet = false;
 	//treat the input function as a polynomial
 	//split it to +/- and every opearhand of sum or minus
 	for (int index = 0; index < equation.size(); index++) {
@@ -100,6 +101,10 @@ function::function(std::string equation) {
 }
 
 double function::operator ()(vecD vec) {
+	if (intervalSet) {
+		if (vec[0] < lowerBound || vec[0]>upperBound)
+			return 99999;
+	}
 	double result = 0.0;
 	double x = vec[0];
 	double y = 1;
@@ -120,4 +125,10 @@ void function::df(vecD & x, vecD & deriv) {
 		temp2[index] -= 0.01;
 		deriv.push_back( (((*this)(temp1) - (*this)(temp2)) / 0.02) );
 	}
+}
+
+void function::setInterval(double l,double u) {
+	this->intervalSet = true;
+	this->lowerBound = l;
+	this->upperBound = u;
 }
