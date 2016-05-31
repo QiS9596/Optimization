@@ -4,6 +4,16 @@
 #include <iostream>
 #include <sstream>
 #define VecD std::vector<double>
+/* conjugate gradient based on numrical recipes book
+ * when using this method for optimization, user should set function when construct cg instance
+ * then use minimize(VecD & p) to minimize.
+ * p should be the initial point value
+ * return value of minimize function is the point coordinate where the function is optimized
+ */
+const int MAXIMUM_ITERATION_COUNT = 300;	//maximum iteration count
+const double CONJUGATE_GRADIENT_EPSILON = 1.0e-18;//tolerance
+const double GRADIENT_TOLERENCE = 1.0e-18;//GRADIENT_TOLERENCE is the convergence criterion for the zero gradient test says the nr3 book
+
 template <class T>
 class cg : public linemethod<T>
 {
@@ -14,24 +24,19 @@ public:
 	using linemethod<T>::func;
 	using linemethod<T>::linmin;
 	using linemethod<T>::p;
-	using linemethod<T>::xi;
+	using linemethod<T>::dxi;
 	const double cgtol = 3.0e-8;
 	cg(T & funcd) : linemethod<T>(funcd) {}
 	VecD minimize(VecD & pp) {
-		const int MAXIMUM_ITERATION_COUNT = 300;	//maximum iteration count
-		const double EPS = 1.0e-18;//tolerance
-		const double GTOL = 1.0e-18;//GTOL is the convergence criterion for the zero gradient test says the nr3 book
-		double gg, dgg;
-		int dimension = pp.size();
-		//p.resize(dimension);
-		p = pp;
+
+		double delta_T_mul_delta, xi_add_delta_mul_xi;
+		int dimension = pp.size();		p = pp;//get imformation to local variables
 		VecD g(dimension), h(dimension);
-		xi.resize(dimension);
+		dxi.resize(dimension);
 		double fp = func(p);
-		func.df(p, xi);//p is the current point.this function set f(vec)dvec[i] to xi[i]
+		func.df(p, dxi);//p is the current point.this function set f(vec)dvec[i] to dxi[i]
 		for (int index = 0; index < dimension; index++) {
-			g[index] = -xi[index];
-			xi[index] = h[index] = g[index];
+			g[index] = -dxi[index];	dxi[index] = g[index];h[index] = g[index];
 		}
 		for (int iterations = 0; iterations < MAXIMUM_ITERATION_COUNT; iterations++) {
 			std::cout << "i " << iterations << std::endl; //OUT_PUT
@@ -39,36 +44,41 @@ public:
 			iter = iterations;
 			cgret = linmin();
 
-			if (2.0 * abs(cgret - fp) <= cgtol*(abs(cgret) + abs(fp) + EPS)) {
+			if (2.0 * abs(cgret - fp) <= cgtol*(abs(cgret) + abs(fp) + CONJUGATE_GRADIENT_EPSILON)) {
 				return p;
 			}
 			fp = cgret;
-			func.df(p, xi);
-			double test = 0.0;
+			func.df(p, dxi);
+			double tempa = 0.0;
 			double den = MAX(abs(fp), 1.0);
+			bool return_flag = false;
+			xi_add_delta_mul_xi = delta_T_mul_delta = 0.0;
 			for (int index = 0; index < dimension; index++) {
-				double temp = abs(xi[index])*MAX(abs(p[index]), 1.0) / den;
-				if (temp > test)test = temp;
+				delta_T_mul_delta += g[index] * g[index];//delta f(Xi)T* delta f(Xi)
+				xi_add_delta_mul_xi += (dxi[index] + g[index])*dxi[index];
 			}
-			if (test < GTOL) { 
+			return_flag = delta_T_mul_delta == 0.0;
+			if (return_flag) {
 				return p;
 			}
-			dgg = gg = 0.0;
+
 			for (int index = 0; index < dimension; index++) {
-				gg += g[index] * g[index];//delta f(Xi)T* delta f(Xi)
-				dgg += (xi[index] + g[index])*xi[index];
+				double temp = abs(dxi[index])*MAX(abs(p[index]), 1.0) / den;
+				if (temp > tempa)tempa = temp;
 			}
-			if (gg == 0.0) {
+			return_flag = tempa < GRADIENT_TOLERENCE;
+			if (return_flag) {
 				return p;
 			}
-			//std::cout << "delta x" << xi[0] << std::endl;
-			double gram = dgg / gg;//beita
+
+			//std::cout << "delta x" << dxi[0] << std::endl;
+			double ratio_temp = xi_add_delta_mul_xi / delta_T_mul_delta;//beita
 			buffer << "Si ";
 			for (int j = 0; j<n; j++) {
-				g[j] = -xi[j];
+				g[j] = -dxi[j];
 				std::cout << "Si" << g[j] << std::endl;//OUT_PUT
 				buffer <<g[j] << " ";
-				xi[j] = h[j] = g[j] + gram*h[j];//Si
+				dxi[j] = h[j] = g[j] + ratio_temp*h[j];//Si
 			}
 			buffer << "\r\n";
 			buffer << "Xi";

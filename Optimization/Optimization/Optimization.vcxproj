@@ -145,7 +145,6 @@
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="newton.cpp" />
     <ClCompile Include="simplified_matrix.cpp" />
-    <ClCompile Include="source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libabc\src\loadfile.hpp" />

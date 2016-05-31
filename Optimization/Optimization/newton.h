@@ -114,15 +114,15 @@ public:
 	using newton::dimension;
 	using newton::buffer;
 
-	void dfpmin(VecD &p, double gtol, int &iter, double &fret, function &funcd)
+	void min(VecD &p, double gtol, int &iter, double &fret, function &funcd)
 	{
-		const int ITMAX = 200;
-		const double EPS = 1.0e-18;
-		const double TOLX = 4 * EPS, STPMX = 100.0;
+		const int MAXIMUM_ITERATION_COUNT = 200;
+		const double Q_NEWTON_EPSILON = 1.0e-18;
+		const double TOLX = 4 * Q_NEWTON_EPSILON, STPMX = 100.0;
 		bool check;
 		double den, fac, fad, fae, fp, stpmax, sum = 0.0, sumdg, sumxi, temp, test;
 		int n = p.size();
-		VecD dg(n), g(n), hdg(n), pnew(n), xi(n);
+		VecD dg(n), g(n), hdg(n), pnew(n), dxi(n);
 		Mat hessin(n, n);
 		fp = funcd(p);
 		funcd.df(p, g);
@@ -130,21 +130,21 @@ public:
 			for (int j = 0; j < n; j++) {
 				hessin.cell(i, j) = 0.0;
 				hessin.cell(i, j) = 1.0;
-				xi[i] = -g[i];
+				dxi[i] = -g[i];
 				sum += p[i] * p[i];
 			}
 		}
 		stpmax = STPMX*(sqrt(sum)+ double(n));
-		for (int its = 0; its<ITMAX; its++) {
+		for (int its = 0; its<MAXIMUM_ITERATION_COUNT; its++) {
 			iter = its;
 			fp = fret;
 			for (int i = 0; i<n; i++) {
-				xi[i] = pnew[i] - p[i];
+				dxi[i] = pnew[i] - p[i];
 				p[i] = pnew[i];
 			}
 			test = 0.0;
 			for (int i = 0; i<n; i++) {
-				temp = abs(xi[i]) / (abs(p[i])+ 1.0);
+				temp = abs(dxi[i]) / (abs(p[i])+ 1.0);
 				if (temp > test) test = temp;
 			}
 			/*
@@ -168,27 +168,27 @@ public:
 			}
 			fac = fae = sumdg = sumxi = 0.0;
 			for (int i = 0; i<n; i++) {
-				fac += dg[i] * xi[i];
+				fac += dg[i] * dxi[i];
 				fae += dg[i] * hdg[i];
 				sumdg += dg[i]*dg[i];
-				sumxi += xi[i]*xi[i];
+				sumxi += dxi[i]*dxi[i];
 			}
 			/*
-			if (fac > sqrt(EPS*sumdg*sumxi)) {
+			if (fac > sqrt(Q_NEWTON_EPSILON*sumdg*sumxi)) {
 				fac = 1.0 / fac;
 				fad = 1.0 / fae;
-				for (int i = 0; i<n; i++) dg[i] = fac*xi[i] - fad*hdg[i];
+				for (int i = 0; i<n; i++) dg[i] = fac*dxi[i] - fad*hdg[i];
 				for (int i = 0; i<n; i++) {
 					for (int j = i; j<n; j++) {
-						hessin.cell(i,j) += fac*xi[i] * xi[j]
+						hessin.cell(i,j) += fac*dxi[i] * dxi[j]
 							- fad*hdg[i] * hdg[j] + fae*dg[i] * dg[j];
 						hessin.cell(i,j) = hessin.cell(i,j);
 					}
 				}
 			}
 			for (int i = 0; i<n; i++) {
-				xi[i] = 0.0;
-				for (int j = 0; j<n; j++) xi[i] -= hessin.cell(i,j) * g[j];
+				dxi[i] = 0.0;
+				for (int j = 0; j<n; j++) dxi[i] -= hessin.cell(i,j) * g[j];
 			}*/
 		}
 		throw("too many iterations in dfpmin");

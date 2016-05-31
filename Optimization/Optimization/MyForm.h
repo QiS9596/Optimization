@@ -1,10 +1,8 @@
 #pragma once
 #include "DataManager.h"
 #include "DotNetUtilities.h"
-#include "linemethod.h"
 #include "function.h"
 #include "cg.h"
-#include "simplified_matrix.h"
 #include <vector>
 #include "newton.h"
 #define VecD std::vector<double>
