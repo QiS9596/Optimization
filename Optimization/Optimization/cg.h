@@ -1,5 +1,6 @@
 #pragma once
 #include "linemethod.h"
+#include "newton.h"
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -29,7 +30,7 @@ public:
 	cg(T & funcd) : linemethod<T>(funcd) {}
 	VecD minimize(VecD & pp) {
 
-		double delta_T_mul_delta, xi_add_delta_mul_xi;
+		double delta_T_mul_delta = 0.0,xi_add_delta_mul_xi = 0.0;
 		int dimension = pp.size();		p = pp;//get imformation to local variables
 		VecD g(dimension), h(dimension);
 		dxi.resize(dimension);
@@ -42,17 +43,24 @@ public:
 			std::cout << "i " << iterations << std::endl; //OUT_PUT
 			buffer << "i " << iterations << "\r\n";
 			iter = iterations;
+			VecD previous(dimension);
+			for (int index = 0; index < dimension; index++)
+				previous[index] = p[index];
 			cgret = linmin();
-
-			if (2.0 * abs(cgret - fp) <= cgtol*(abs(cgret) + abs(fp) + CONJUGATE_GRADIENT_EPSILON)) {
+			if (newton::vec_approximately_equals(previous, p)) {
 				return p;
 			}
-			fp = cgret;
-			func.df(p, dxi);
-			double tempa = 0.0;
-			double den = MAX(abs(fp), 1.0);
 			bool return_flag = false;
-			xi_add_delta_mul_xi = delta_T_mul_delta = 0.0;
+
+			return_flag = 2.0 * abs(cgret - fp) <= cgtol*(abs(cgret) + abs(fp) + CONJUGATE_GRADIENT_EPSILON);
+			if (return_flag) {
+				return p;
+			}
+			fp = linmin();
+			func.df(p, dxi);
+			double tempa,den;
+			den = MAX(abs(fp), 1.0);
+			xi_add_delta_mul_xi = delta_T_mul_delta = tempa =  0.0;
 			for (int index = 0; index < dimension; index++) {
 				delta_T_mul_delta += g[index] * g[index];//delta f(Xi)T* delta f(Xi)
 				xi_add_delta_mul_xi += (dxi[index] + g[index])*dxi[index];
@@ -63,8 +71,11 @@ public:
 			}
 
 			for (int index = 0; index < dimension; index++) {
-				double temp = abs(dxi[index])*MAX(abs(p[index]), 1.0) / den;
-				if (temp > tempa)tempa = temp;
+				double temp;
+				temp = abs(dxi[index])*MAX(abs(p[index]), 1.0) ;
+				temp /= den;
+				tempa = (temp > tempa ? temp : tempa);
+
 			}
 			return_flag = tempa < GRADIENT_TOLERENCE;
 			if (return_flag) {
@@ -90,6 +101,7 @@ public:
 			
 		}
 		std::cerr << "too many iteration" << std::endl;
+		return p;
 	};//initial point pp, return value minimized point
 
 	std::string out_put_data() {

@@ -11,6 +11,13 @@ inline const T &MAX(const T &a, const T &b)
 }
 
 template<class T>
+inline const T &MIN(const T &a, const T &b) {
+	bool flag = a < b;
+	if (flag)return a;
+	return b;
+}
+
+template<class T>
 inline T SIGN(const T &a, const T &b)
 {
 	bool flag1 = b >= 0, flag2 = a >= 0;
@@ -143,12 +150,12 @@ struct GoldenBracket {
 			u = (abs(d) >= tola ? x + d : x + SIGN(tola, d));
 			fu = func(u);
 			if (fu <= fx) {
-				if (u >= x) a = x; else b = x;
+				(u >= x ? a : b) = x;
 				br_shft(v, w, x, u);
 				br_shft(fv, fw, fx, fu);
 			}
 			else {
-				if (u < x) a = u; else b = u;
+				(u < x ? a : b) = u;
 				if (fu <= fw || w == x) {
 					v = w;
 					w = u;
@@ -194,12 +201,14 @@ struct F1dim {
 template <class T>
 class linemethod
 {
+private:
+	const double l;
 public:
 	std::vector<double> p;//the point
 	std::vector<double> dxi;
 	T & func;
 	int n;
-	linemethod(T & funct) :func(funct) {
+	linemethod(T & funct,const double ll = 1.0) :func(funct),l(ll) {
 		
 	};
 	double linmin() {
@@ -208,15 +217,19 @@ public:
 		n = p.size();
 		F1dim<T> f1dim(p, dxi, func);
 		ax = 0.0;
-		cx = 1.0;
+		cx = ax + l;
 		GoldenBracket br;
 		br.bracket(ax, cx, f1dim);
 		xmin = br.minimize(f1dim);
-		for (int index = 0; index < n; index++) {
-			dxi[index] *= xmin;
-			p[index] += dxi[index];
-		}
+		move(xmin);
 
 		return br.fmin;
 	};
+
+	void move(double xmin) {
+		for (int index = 0; index < p.size(); index++) {
+			dxi[index] *= xmin;
+			p[index] += dxi[index];
+		}
+	}
 };
