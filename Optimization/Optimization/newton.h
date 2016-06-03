@@ -24,6 +24,14 @@ public:
 		p = pp;
 		dimension = pp.size();
 
+		buffer << "Newton method with function: " << func.str() << " and initial point: ";
+		for (int index = 0; index < pp.size(); index++) {
+			buffer << pp[index];
+			if (index < pp.size() - 1)
+				buffer << ", ";
+		}
+		buffer << "\r\n";
+
 		for (int index = 0; index < MAXIMUM_ITERATION_COUNT; index++) {
 
 			Mat * H = generate_current_Hessian_matrix();
@@ -134,7 +142,8 @@ public:
 				sum += p[i] * p[i];
 			}
 		}
-		stpmax = STPMX*(sqrt(sum)+ double(n));
+		//stpmax = STPMX*(sqrt(sum)+ double(n));
+		
 		for (int its = 0; its<MAXIMUM_ITERATION_COUNT; its++) {
 			iter = its;
 			fp = fret;
@@ -147,6 +156,7 @@ public:
 				temp = abs(dxi[i]) / (abs(p[i])+ 1.0);
 				if (temp > test) test = temp;
 			}
+			
 			/*
 			if (test < TOLX)
 				return;
@@ -158,6 +168,7 @@ public:
 				temp = abs(g[i])*(abs(p[i])+ 1.0) / den;
 				if (temp > test) test = temp;
 			}*/
+			/*
 			if (test < gtol)
 				return;
 			for (int i = 0; i<n; i++)
@@ -165,7 +176,7 @@ public:
 			for (int i = 0; i<n; i++) {
 				hdg[i] = 0.0;
 				for (int j = 0; j<n; j++) hdg[i] += hessin.cell(i,j) * dg[j];
-			}
+			}*/
 			fac = fae = sumdg = sumxi = 0.0;
 			for (int i = 0; i<n; i++) {
 				fac += dg[i] * dxi[i];
@@ -201,6 +212,13 @@ public:
 		pt = p;
 		p = pp;
 		dimension = pp.size();
+		buffer << "Quasi-Newton method with function: " << func.str() << " and initial point: ";
+		for (int index = 0; index < pp.size(); index++) {
+			buffer << pp[index];
+			if (index < pp.size() - 1)
+				buffer << ", ";
+		}
+		buffer << "\r\n";
 
 		for (int index = 0; index < MAXIMUM_ITERATION_COUNT; index++) {
 

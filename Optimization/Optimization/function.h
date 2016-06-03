@@ -58,15 +58,14 @@ public:
 		return false;
 	}
 
-	std::vector<std::string> split(std::string str, std::string delim)
+	std::vector<std::string> split(std::string str, std::string source)
 	{
 		std::vector<std::string> result;
-		int start = 0;
-		int end = 0;
+		int start = 0, end = 0;
 
 		for (size_t i = 0; i < str.size(); i++)
 		{
-			if (isCut(str[i], delim))
+			if (Cut(str[i], source))
 			{
 				end = i;
 				std::string temp = str.substr(start, end - start);
@@ -77,9 +76,9 @@ public:
 		result.push_back(str.substr(start, str.size() - start));
 		return result;
 	}
-	bool isCut(char check, std::string delim) {
-		for (size_t i = 0; i < delim.size(); i++) {
-			if (check == delim[i])
+	bool Cut(char ch, std::string source) {
+		for (int i = 0; i < source.size(); i++) {
+			if (ch == source[i])
 			{
 				return true;
 			}
