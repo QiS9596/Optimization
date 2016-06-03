@@ -19,14 +19,15 @@ template <class T>
 class cg : public linemethod<T>
 {
 public:
-	std::stringstream buffer;
-	int iter;
-	double cgret;
+
 	using linemethod<T>::func;
 	using linemethod<T>::linmin;
 	using linemethod<T>::p;
 	using linemethod<T>::dxi;
 	const double cgtol = 3.0e-8;
+	std::stringstream buffer;
+	int iter;
+	double cgret;
 	cg(T & funcd) : linemethod<T>(funcd) {}
 	VecD minimize(VecD & pp) {
 
@@ -36,6 +37,13 @@ public:
 		dxi.resize(dimension);
 		double fp = func(p);
 		func.df(p, dxi);//p is the current point.this function set f(vec)dvec[i] to dxi[i]
+		buffer << "Initializing conjugate gradient method with function: " << func.str() << " initial point: ";
+		for (int index = 0; index < dimension; index++) {
+			buffer << p[index];
+			if (index < dimension - 1)
+				buffer << ", ";
+		}
+		buffer << "\r\n";
 		for (int index = 0; index < dimension; index++) {
 			g[index] = -dxi[index];	dxi[index] = g[index];h[index] = g[index];
 		}
@@ -62,8 +70,8 @@ public:
 			den = MAX(abs(fp), 1.0);
 			xi_add_delta_mul_xi = delta_T_mul_delta = tempa =  0.0;
 			for (int index = 0; index < dimension; index++) {
-				delta_T_mul_delta += g[index] * g[index];//delta f(Xi)T* delta f(Xi)
-				xi_add_delta_mul_xi += (dxi[index] + g[index])*dxi[index];
+				delta_T_mul_delta += pow(g[index],2.0) ;//delta f(Xi)T* delta f(Xi)
+				xi_add_delta_mul_xi +=  g[index]*dxi[index] + pow(dxi[index],2.0);
 			}
 			return_flag = delta_T_mul_delta == 0.0;
 			if (return_flag) {

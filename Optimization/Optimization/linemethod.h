@@ -29,12 +29,6 @@ inline T SIGN(const T &a, const T &b)
 	return a;
 }
 
-template<class T>
-inline void SWAP(T &a, T &b)
-{
-	T temp = a; a = b; b = temp;
-}
-
 
 struct GoldenBracket {
 	double xmin, fmin;
@@ -57,27 +51,27 @@ struct GoldenBracket {
 		fa = func(ax);
 		fb = func(bx);
 		if (fb > fa) {
-			SWAP(ax, bx);
-			SWAP(fb, fa);
+			double tempa = bx;	bx = ax;	ax = tempa;
+			double tempb = fb; fb = fa; fa = tempb;
 		}
-		cx = bx + golden_ratio*(bx - ax);
+		cx = (1+ golden_ratio)*bx - golden_ratio*ax;
 		fc = func(cx);
 		while (fb > fc) {
-			double r = (bx - ax)*(fb - fc);
-			double q = (bx - cx)*(fb - fa);
+			double r = bx*fb - ax*fb - bx*fc + ax*fc;
+			double q = bx*fb - cx*fb - bx*fa + cx*fa;
 			double u = bx - ((bx - cx)*q - (bx - ax)*r) /
 				(2.0*SIGN(MAX(abs(q - r), golden_tiny), q - r));
-			double ulim = bx + golden_limit*(cx - bx);
-			if ((bx - u)*(u - cx) > 0.0) {
+			double ulim = golden_limit*(cx - bx);
+			if (bx*u+u*cx > u*u+bx*cx) {
 				fu = func(u);
-				if (fu < fc) {
+				if (fc-fu >0) {
 					ax = bx;
 					bx = u;
 					fa = fb;
 					fb = fu;
 					return;
 				}
-				else if (fu > fb) {
+				else if (fu - fb>0) {
 					cx = u;
 					fc = fu;
 					return;
@@ -85,19 +79,19 @@ struct GoldenBracket {
 				u = cx + golden_ratio*(cx - bx);
 				fu = func(u);
 			}
-			else if ((cx - u)*(u - ulim) > 0.0) {
+			else if ((cx - u)*(u - ulim-bx) > 0.0) {
 				fu = func(u);
-				if (fu < fc) {
+				if (fc-fu>0) {
 					br_shft(bx, cx, u, u + golden_ratio*(u - cx));
 					br_shft(fb, fc, fu, func(u));
 				}
 			}
-			else if ((u - ulim)*(ulim - cx) >= 0.0) {
-				u = ulim;
+			else if (u >= ulim+bx && ulim+bx >= cx) {
+				u = ulim+bx;
 				fu = func(u);
 			}
 			else {
-				u = cx + golden_ratio*(cx - bx);
+				u = (1 + golden_ratio)*cx - golden_ratio*bx;
 				fu = func(u);
 			}
 			br_shft(ax, bx, cx, u);
@@ -114,14 +108,15 @@ struct GoldenBracket {
 		double a, b, d = 0.0, etemp, fu, fv, fw, fx;
 		double p, q, r, tola, tolb, u, v, w, x, xm;
 		double e = 0.0;
-		a = (ax < cx ? ax : cx);//switch the left and right boundary of the bracket
-		b = (ax > cx ? ax : cx);//to ensure that the left boundary is smaller than the right one
+		a = MIN(ax, cx);//switch the left and right boundary of the bracket
+		b = MAX(ax, cx);//to ensure that the left boundary is smaller than the right one
 		x = w = v = bx;
 		fw = fv = fx = func(x);
 		for (int iter = 0; iter<MAXIMUM_ITERATION_COUNT; iter++) {
-			xm = 0.5*(a + b);
+			xm = a + b;	xm /= 2;
 			tolb = 2.0*(tola = tolerence*abs(x) + tol_TINY);
-			if (abs(x - xm) <= (tolb - 0.5*(b - a))) {
+			bool return_flag = abs(x - xm) <= (tolb - 0.5*(b - a));
+			if (return_flag) {
 				fmin = fx;
 				return xmin = x;
 			}
@@ -129,25 +124,31 @@ struct GoldenBracket {
 				r = (x - w)*(fx - fv);
 				q = (x - v)*(fx - fw);
 				p = (x - v)*q - (x - w)*r;
-				q = 2.0*(q - r);
-				if (q > 0.0) p = -p;
+				q -= r; q *= 2.0;
+				p = (q > 0.0 ? -p : p);
 				q = abs(q);
 				etemp = e;
 				e = d;
-				if (abs(p) >= abs(0.5*q*etemp) || p <= q*(a - x)
-					|| p >= q*(b - x))
+				bool bool1, bool2, bool3;
+				bool1 = abs(p) >= abs(0.5*q*etemp);
+				bool2 = p <= q*(a - x);
+				bool3 = p >= q*(b - x);
+				if (bool1||bool2||bool3)
 					d = golden_ratio_conter*(e = (x >= xm ? a - x : b - x));
 				else {
 					d = p / q;
 					u = x + d;
-					if (u - a < tolb || b - u < tolb)
+					bool1 = u - a < tolb;
+					bool2 = b - u < tolb;
+					if (bool1||bool2)
 						d = SIGN(tola, xm - x);
 				}
 			}
 			else {
 				d = golden_ratio_conter*(e = (x >= xm ? a - x : b - x));
 			}
-			u = (abs(d) >= tola ? x + d : x + SIGN(tola, d));
+			u = (abs(d) >= tola ?  d :  SIGN(tola, d));
+			u += x;
 			fu = func(u);
 			if (fu <= fx) {
 				(u >= x ? a : b) = x;
@@ -208,7 +209,7 @@ public:
 	std::vector<double> dxi;
 	T & func;
 	int n;
-	linemethod(T & funct,const double ll = 1.0) :func(funct),l(ll) {
+	linemethod(T & funct,const double ll = 1.5) :func(funct),l(ll) {
 		
 	};
 	double linmin() {
@@ -217,7 +218,7 @@ public:
 		n = p.size();
 		F1dim<T> f1dim(p, dxi, func);
 		ax = 0.0;
-		cx = ax + l;
+		cx = l;
 		GoldenBracket br;
 		br.bracket(ax, cx, f1dim);
 		xmin = br.minimize(f1dim);
