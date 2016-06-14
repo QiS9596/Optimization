@@ -59,6 +59,10 @@ function::function(std::string equation) {
 				if (isNumirical(split_on_multi[indexa])) {
 					constant_factor.push_back(carry * std::stod(split_on_multi[indexa].c_str()));
 				}
+				else if (split_on_multi[indexa][0] == '('&&split_on_multi[indexa][1] == '-') {
+					std::string tempb = split_on_multi[indexa].substr(2, split_on_multi[indexa].size() - 3);
+					constant_factor.push_back(-1.0*carry*std::stod(tempb));
+				}
 				else if(split_on_multi[indexa] == "x"){
 					x_expo.push_back(1.0);
 				}
@@ -85,7 +89,7 @@ function::function(std::string equation) {
 							std::string tempb = split_on_exponetial[indexb].substr(2,split_on_exponetial[indexb].size()-3);
 							std::cout << "temp" << tempb<<std::endl;
 							if (var_name == 1)
-								x_expo.push_back(std::stod(tempb));
+								x_expo.push_back(-1.0*std::stod(tempb));
 							else if (var_name == 2)
 								y_expo.push_back(std::stod(tempb));
 						}
