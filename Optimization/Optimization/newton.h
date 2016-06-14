@@ -206,6 +206,7 @@ public:
 	}
 
 	VecD minimize(VecD & pp) {
+		std::cout << "pp.size" << pp.size() << std::endl;
 		p.resize(pp.size());
 		VecD pt(pp.size());
 

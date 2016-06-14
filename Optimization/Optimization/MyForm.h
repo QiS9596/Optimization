@@ -274,7 +274,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					std::cout << "break point1" << std::endl;
 					VecD p;
 					p.push_back(Convert::ToDouble(userCommand[2]));
-					//std::cout << "current dimension " << (*functions)[temp]->dimension << std::endl;
+					std::cout << "current dimension " << (*functions)[temp]->dimension << std::endl;
 					//std::cout << (*functions)[temp]->str() << std::endl;
 					if ((*functions)[temp-1]->dimension == 2)
 						p.push_back(Convert::ToDouble(userCommand[3]));
@@ -282,7 +282,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += gcnew String(nw.out_put_data().c_str());
 					Output->Text += "x: ";
 					Output->Text += p[0];
-					if (temp != 1) {
+					if (((*functions)[temp - 1])->dimension != 1) {
 						Output->Text += ", ";
 						Output->Text += p[1];
 					}
@@ -296,13 +296,13 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					std::cout << "break point1" << std::endl;
 					VecD p;
 					p.push_back(Convert::ToDouble(userCommand[2]));
-					if (temp != 1)
+					if ((*functions)[temp - 1]->dimension == 2)
 						p.push_back(Convert::ToDouble(userCommand[3]));
 					p = qnw.minimize(p);
 					Output->Text += gcnew String(qnw.out_put_data().c_str());
 					Output->Text += "x: ";
 					Output->Text += p[0];
-					if (temp != 1) {
+					if (((*functions)[temp - 1])->dimension != 1) {
 						Output->Text += ", ";
 						Output->Text += p[1];
 					}
@@ -322,7 +322,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += gcnew String(cg1.out_put_data().c_str());
 					Output->Text += "x: ";
 					Output->Text += p[0];
-					if (temp != 1) {
+					if (((*functions)[temp - 1])->dimension != 1) {
 						Output->Text += ", ";
 						Output->Text += p[1];
 					}

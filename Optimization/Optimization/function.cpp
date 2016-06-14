@@ -11,7 +11,7 @@ function::function(std::string equation) {
 	//treat the input function as a polynomial
 	//split it to +/- and every opearhand of sum or minus
 	for (int index = 0; index < equation.size(); index++) {
-		if (equation[index] == '+' || equation[index] == '-')
+		if (equation[index] == '+' || (equation[index] == '-'&&equation[index-1]!='('))
 		{
 			equation.insert(index, " ");
 			equation.insert(index + 2, " ");
@@ -53,6 +53,7 @@ function::function(std::string equation) {
 		 * for a it's 1* carry, for x^b/y^c it should be x^0 or y^0
 		 */
 		else {
+			std::cout << "hello,world" << std::endl;
 			std::vector<std::string> split_on_multi = split(frag[index], std::string("*"));
 			for (int indexa = 0; indexa < split_on_multi.size(); indexa++) {
 				if (isNumirical(split_on_multi[indexa])) {
@@ -68,6 +69,7 @@ function::function(std::string equation) {
 					std::vector<std::string> split_on_exponetial = split(split_on_multi[indexa], std::string("^"));
 					int var_name = 0;
 					for (int indexb = 0; indexb < split_on_exponetial.size(); indexb++) {
+						std::cout << "current" << split_on_exponetial[indexb] << std::endl;
 						if (split_on_exponetial[indexb] == "x")
 							var_name = 1;
 						else if (split_on_exponetial[indexb] == "y")
@@ -78,6 +80,14 @@ function::function(std::string equation) {
 								x_expo.push_back(tempa);
 							else if (var_name == 2)
 								y_expo.push_back(tempa);
+						}
+						else if (split_on_exponetial[indexb][0] == '('&&split_on_exponetial[indexb][1] == '-') {
+							std::string tempb = split_on_exponetial[indexb].substr(2,split_on_exponetial[indexb].size()-3);
+							std::cout << "temp" << tempb<<std::endl;
+							if (var_name == 1)
+								x_expo.push_back(std::stod(tempb));
+							else if (var_name == 2)
+								y_expo.push_back(std::stod(tempb));
 						}
 					}
 				}
